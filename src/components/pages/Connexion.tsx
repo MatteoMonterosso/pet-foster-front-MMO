@@ -1,4 +1,10 @@
-// problème sur les faux pays ; temps de chargement long ; pouvoir écrire
+// problème sur les faux pays / temps de chargement long => pouvoir écrire / téléphone a vérifier / 
+
+// API RestCountries : Cette API sert à récupérer la liste des pays. Elle fournit des informations sur tous les pays du monde, y compris leurs noms, codes, et autres détails.
+
+// API CountriesNow : Cette API sert à récupérer les villes d'un pays spécifique. Lorsque vous sélectionnez un pays, l'API renvoie une liste des villes disponibles dans ce pays.
+
+
 
 import React, { useState, useEffect } from 'react';
 import { Container, Section, Heading, Box, Button, Tabs } from 'react-bulma-components';
