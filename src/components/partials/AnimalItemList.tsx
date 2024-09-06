@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 import { Box, Columns, Image, Button } from 'react-bulma-components';
 import { Pencil, Eye } from 'react-flaticons';
 import { useModal } from '../../hooks/ModalContext';
-
-// Utilitaires
 import computeAge from '../../utils/computeAge'
 
 // Interface for the creator object

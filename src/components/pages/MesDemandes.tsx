@@ -1,33 +1,43 @@
-// j'ai changé la fonction filtre par un tri alphabétique par click
-
 import React, { useState } from 'react';
 import { Heading, Section, Notification } from 'react-bulma-components';
 
+interface DataItem {
+  animal: string;
+  demandeur: string;
+  statut: string;
+}
+
+interface SortConfig {
+  key: keyof DataItem | null;
+  direction: 'ascending' | 'descending';
+}
+
 const FilterPage = () => {
-
   // État pour gérer les données et l'ordre de tri
-  const [data, setData] = useState([
-
+  const [data, setData] = useState<DataItem[]>([
     { animal: 'Chat', demandeur: 'Alice', statut: 'En attente' },
     { animal: 'Chien', demandeur: 'Bob', statut: 'Approuvé' },
-
   ]);
 
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
+    const [sortConfig, setSortConfig] = useState<SortConfig>({
+      key: null,
+      direction: 'ascending',
+    });
 
   const sortedData = React.useMemo(() => {
 
     let sortableData = [...data];
 
-    if (sortConfig !== null) {
-
+    if (sortConfig.key !== null) {
       sortableData.sort((a, b) => {
+        const aValue = a[sortConfig.key as keyof typeof a]; // Typage explicite pour éviter l'erreur
+        const bValue = b[sortConfig.key as keyof typeof b];
 
-        if (a[sortConfig.key] < b[sortConfig.key]) {
+        if (aValue < bValue) {
           return sortConfig.direction === 'ascending' ? -1 : 1;
         }
 
-        if (a[sortConfig.key] > b[sortConfig.key]) {
+        if (aValue > bValue) {
           return sortConfig.direction === 'ascending' ? 1 : -1;
         }
 
@@ -40,35 +50,29 @@ const FilterPage = () => {
 
   }, [data, sortConfig]);
 
-  const requestSort = (key) => {
+  const requestSort = (key: keyof DataItem) => {
 
-    let direction = 'ascending';
+    let direction: 'ascending' | 'descending' = 'ascending';
 
-    if (
-      sortConfig.key === key &&
-      sortConfig.direction === 'ascending'
-    )
-
-    {
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
       direction = 'descending';
     }
-
     setSortConfig({ key, direction });
-
   };
 
   const handleConfirm = () => {
-
     if (window.confirm('Êtes-vous sûr de vouloir valider ?')) {
+      alert('Validation effectuée !');
     }
-
   };
 
   return (
     <>
+    
 <div>
   <Heading>Mes demandes</Heading>
 </div>
+
 <Section>
   < Notification color={'info'} light={true}>
     <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sequi quisquam, commodi, atque dolorum delectus aspernatur perferendis magnam corrupti totam, suscipit ipsa nam impedit corporis accusantium molestias quia obcaecati esse eligendi.</p>
