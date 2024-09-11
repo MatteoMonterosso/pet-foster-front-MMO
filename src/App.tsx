@@ -8,7 +8,7 @@ import TrouverAnimal  from "./components/pages/TrouverAnimal";
 import Error404 from "./components/pages/404";
 import Accueil from "./components/pages/Accueil";
 import Information from "./components/pages/Information";
-import PolitiqueDeConfidentialite from "./components/pages/PolitiqueDeConfidentialite.";
+import PolitiqueDeConfidentialite from "./components/pages/PolitiqueDeConfidentialite";
 import MesAnimaux from "./components/pages/MesAnimaux";
 import MesDemandes from "./components/pages/MesDemandes";
 import Contact from "./components/pages/Contact";
@@ -16,12 +16,16 @@ import ProfilAnimal from "./components/pages/ProfilAnimal";
 import ProfilUtilisateur from "./components/pages/ProfilUtilisateur";
 import Connexion from "./components/pages/Connexion";
 import { ToastContainer } from "react-toastify";
+import useTarteaucitron from "./hooks/UseTarteaucitron";
 
 
 
+  const App = () => {
+    useTarteaucitron();
+ 
+ 
 
-function App() {
-
+  
 
   return (
     <>
