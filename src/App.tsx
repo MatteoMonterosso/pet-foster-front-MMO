@@ -17,10 +17,13 @@ import ProfilUtilisateur from "./components/pages/ProfilUtilisateur";
 import Connexion from "./components/pages/Connexion";
 import { ToastContainer } from "react-toastify";
 import ScrollToTop from "./components/partials/ScrollToTop";
+import ThemeToggle from "./components/Toggle";
+import { useTheme } from "./hooks/DarkModeContext";
 
 
 
 function App() {
+  const { isDarkMode } = useTheme();
 
 
   return (
@@ -45,6 +48,11 @@ function App() {
       </Routes>
     </Router>
     
+     <div className={isDarkMode ? 'dark-mode' : 'light-mode'}></div>
+       <h1>{isDarkMode ? 'Dark Mode' : 'Light Mode'}</h1>
+       <ThemeToggle/>
+
+
       <Footer />
       <ToastContainer />
     </>
