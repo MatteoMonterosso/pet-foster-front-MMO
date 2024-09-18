@@ -37,6 +37,7 @@ import { ThemeProvider } from './hooks/DarkModeContext.tsx';
 // Initialisation de l'application
 
 createRoot(document.getElementById('root')!).render(
+
 <AuthProvider>
     <ToastProvider>
     <ModalProvider>  

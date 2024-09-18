@@ -10,7 +10,7 @@ const ThemeToggle = () => {
     <Toggle
       checked={isDarkMode}
       icons={{ checked: '🌙' , unchecked: '🔆'}}
-      onChange={toggleTheme}
+      onChange={toggleTheme}  // Déclenche le basculement du thème
       />
   )};
   

@@ -19,12 +19,21 @@ import { ToastContainer } from "react-toastify";
 import ScrollToTop from "./components/partials/ScrollToTop";
 import ThemeToggle from "./components/Toggle";
 import { useTheme } from "./hooks/DarkModeContext";
+import { useEffect } from "react";
+import './App.css';
 
 
 
 function App() {
-  const { isDarkMode } = useTheme();
+  const { isDarkMode } = useTheme(); // Récupére la valeur de isDarkMode depuis le contexte
 
+  useEffect(() => {
+    if (isDarkMode) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+  }, [isDarkMode]); // Applique le mode sombre selon isDarkMode
 
   return (
     <>
@@ -47,16 +56,15 @@ function App() {
         <Route path="*" element={< Error404 />} />
       </Routes>
     </Router>
-    
-     <div className={isDarkMode ? 'dark-mode' : 'light-mode'}></div>
-       <h1>{isDarkMode ? 'Dark Mode' : 'Light Mode'}</h1>
-       <ThemeToggle/>
 
-
+      <ThemeToggle/>
       <Footer />
       <ToastContainer />
+     
+   
+    
     </>
   )
 }
 
-export default App
+export default App;
