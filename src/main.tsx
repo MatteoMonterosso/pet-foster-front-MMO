@@ -31,16 +31,21 @@ import { GeolocationProvider } from "./hooks/GeolocationContext";
 import { AuthProvider } from './hooks/AuthContext.tsx';
 import { ToastProvider } from './hooks/ToastContext.tsx';
 
+// ThemeProvider fournit le contexte pour gérer l'état isDarkMode et changer le thème 
+import { ThemeProvider } from './hooks/DarkModeContext.tsx';
 
 // Initialisation de l'application
 
 createRoot(document.getElementById('root')!).render(
+
 <AuthProvider>
     <ToastProvider>
     <ModalProvider>  
         <GeolocationProvider>
-            <App />
-            <MainModal />      
+            <ThemeProvider>
+                <App />
+                <MainModal />   
+            </ThemeProvider>   
         </GeolocationProvider>
     </ModalProvider>
     </ToastProvider>

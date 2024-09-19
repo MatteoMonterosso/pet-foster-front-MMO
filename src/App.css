@@ -1,4 +1,4 @@
-#root {
+/* #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
@@ -39,4 +39,167 @@
 
 .read-the-docs {
   color: #888;
+} */
+
+
+
+
+
+
+/** Variables Dark Mode*/
+:root{
+  --color-surface-100: #181717;
+  --color-surface-200: #313030;
+  --color-surface-300: #3f3f3f;
+  --color-surface-400: #575757;
+  --color-surface-500: #717171;
+  --color-surface-600: #9e9e9e;
+  --color-surface-700: #c9c9c9;
+
+  --color-palette-100: #313638;
+  --color-palette-200: #F7FFF7;
+  --color-palette-300: #FFEEAD;
+  --color-palette-400: #96CEB4;
+  --color-palette-500: #6CA6C1;
+  --color-palette-600: #9ba8be;
 }
+
+
+
+/* Dark mode */
+body.dark-mode {
+  background-color: var(--color-surface-100);
+  color: var(--color-palette-200);
+  
+}
+
+body.light-mode {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+body.dark-mode #splash-screen { 
+  background-color: var(--color-surface-600);
+  background-image: url('/img/main-background-2.jpg');
+}
+
+body.dark-mode div:not(#splash-screen, #splash-screen > *):has(> h1) {
+  background-color: var(--color-surface-600);
+  background-image: url('/img/main-background-2.jpg');
+}
+
+/*Dark mode du background image*/
+body.dark-mode #splash-screen::after{
+  background-image: url(/img/vector/curbDarkMode.svg);
+}
+
+body.dark-mode #splash-screen+section+section::after {
+  background-image: url(/img/vector/curbDarkMode2.svg);
+}
+
+body.dark-mode #splash-screen .button {
+  background-color: var(--color-surface-400);
+}
+
+/*Dark mode des messages*/
+body.dark-mode article.box {
+  background-color: var(--color-surface-700);
+}
+
+body.dark-mode div.chat-window.box {
+  background-color: var(--color-surface-700);
+}
+
+/*Dark mode section carte et message*/
+body.dark-mode section.yellow-line{
+  background-color: var(--blue);
+  background: rgb(255, 238, 173);
+  background: linear-gradient(150deg,
+      rgb(59, 59, 59) 0%,
+      rgb(59, 59, 59) 100%);
+  padding-bottom: 75px;
+  padding-top: 75px;
+} 
+
+/*Dark mode navbar*/
+body.dark-mode nav.navbar {
+  background-color: var(--color-surface-200);
+  position: absolute;
+  width: 100%;
+  background-color: transparent;
+  transition: all ease-out 0.5s;
+}
+
+/*Dark mode navbar*/
+body.dark-mode button {
+  background-color: var(--color-surface-500);
+  color: var(--color-surface-100);
+}
+
+
+body.dark-mode a.navbar-item {
+color : var(--color-palette-100);
+} 
+
+body.dark-mode #navbarMenu.navbar-menu {
+  background-color: var(--color-surface-200);
+  background-color: transparent;
+}
+
+body.dark-mode react-toggle-track {
+  background-color: var(--color-surface-500);
+}
+
+/*Dark mode des titres*/
+body.dark-mode h3 {
+  color: var(--color-palette-200);
+}
+
+body.dark-mode h2 {
+  color: var(--color-palette-200);
+}
+
+body.dark-mode section.container.box{
+  background-color: var(--color-surface-300);
+}
+
+body.dark-mode div.container.columns {
+  background-color:var(--color-surface-300);
+}
+
+
+
+
+/*Dark mode du footer*/
+body.dark-mode footer {
+  background-color:var(--color-surface-200);
+}
+
+body.dark-mode a {
+  color : (var(--color-palette-200))
+}
+
+
+
+
+
+
+
+/*Dark mode du background image*/
+/* body.dark-mode #splash-screen::after{
+  background-image: url(/img/vector/curbDarkMode.svg);
+}
+
+body.dark-mode #splash-screen+section+section::after {
+  background-image: url(/img/vector/curbDarkMode2.svg);
+} */
+
+/*Dark mode des messages*/
+/* body.dark-mode article.box {
+  background-color: var(--color-palette-400);
+} */
+
+/*Dark mode du footer*/
+/* body.dark-mode footer {
+  background-color:var(--color-palette-300);
+} */
