@@ -137,9 +137,18 @@ body.dark-mode button {
 }
 
 
-body.dark-mode nav.navbar-item :active {
-background-color: red; 
+body.dark-mode a.navbar-item {
+color : var(--color-palette-100);
 } 
+
+body.dark-mode #navbarMenu.navbar-menu {
+  background-color: var(--color-surface-200);
+  background-color: transparent;
+}
+
+body.dark-mode react-toggle-track {
+  background-color: var(--color-surface-500);
+}
 
 /*Dark mode des titres*/
 body.dark-mode h3 {
