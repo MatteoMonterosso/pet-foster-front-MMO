@@ -45,7 +45,7 @@ export default function MiniatureAnimal({ animal }: IMiniatureAnimlProps) {
           height="64"
           loading="lazy"
           onError={(e) => {
-            // Replace image source with the placeholder when there's an error (e.g., 404)
+
             (e.target as HTMLImageElement).src = placeholderImage;
           }}
         />

@@ -65,7 +65,7 @@ function ContactUserForm({ senderId, receiverId }: ContactUserFormProps) {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h3 className="title">Envoyer un message</h3>
+      {/* <h3 className="title">Envoyer un message</h3> */}
       <textarea
         name="content"
         id="content"
