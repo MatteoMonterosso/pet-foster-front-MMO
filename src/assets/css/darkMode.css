@@ -85,7 +85,7 @@ body.dark-mode article.box {
 }
 
 body.dark-mode article.box.animal-item {
-  background-color: var(--color-surface-100);
+  background-color: var(--color-palette-100);
 }
 
 body.dark-mode div.chat-window.box {
@@ -200,7 +200,7 @@ body.dark-mode #user-type-info {
 
 /*Dark mode du footer*/
 body.dark-mode footer {
-  background-color:var(--color-surface-200);
+  background-color:var(--color-surface-400);
 }
 
 body.dark-mode a {
