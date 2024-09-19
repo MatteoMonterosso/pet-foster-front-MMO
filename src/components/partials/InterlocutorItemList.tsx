@@ -37,15 +37,16 @@ function InterlocutorItemList({
         <div style={{ gap: '10px' }} className="is-flex is-align-items-center">
           <div className="messagerie-user-miniature is-narrow has-text-centered">
           <img
-  src={`${apiUrl}/img/utilisateurs/${interlocutorLastMessage.interlocutorId}-${interlocutorLastMessage.interlocutorName}-1.webp`}
-  alt={interlocutorLastMessage.interlocutorName}
-  onError={(e) => {
-    e.target.onerror = null; 
-    e.target.src = `${apiUrl}/img/utilisateurs/1-Alice Dupont-1.webp`;
-  }}
-  width="32"
-  height="32"
-/>
+            src={`${apiUrl}/img/utilisateurs/${interlocutorLastMessage.interlocutorId}-${interlocutorLastMessage.interlocutorName}-1.webp`}
+            alt={interlocutorLastMessage.interlocutorName}
+            onError={(e) => {
+              const imgElement = e.target as HTMLImageElement;
+              imgElement.onerror = null;
+              imgElement.src = `${apiUrl}/img/utilisateurs/1-Alice Dupont-1.webp`;
+            }}
+            width="32"
+            height="32"
+          />
           </div>
 
           <p className="has-text-weight-bold is-size-6 has-text-left">
