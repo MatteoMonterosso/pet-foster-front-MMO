@@ -20,7 +20,7 @@ import ScrollToTop from "./components/partials/ScrollToTop";
 import ThemeToggle from "./components/Toggle";
 import { useTheme } from "./hooks/DarkModeContext";
 import { useEffect } from "react";
-import './App.css';
+import './assets/css/darkMode.css';
 
 
 
