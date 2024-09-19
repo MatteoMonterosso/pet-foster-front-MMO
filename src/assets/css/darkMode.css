@@ -52,14 +52,68 @@ body.dark-mode #splash-screen+section+section::after {
   background-image: url(/img/vector/curbDarkMode2.svg);
 }
 
+body.dark-mode header.scrolled nav {
+  background-color: #fff;
+  transition: all ease-out 0.5s;
+  box-shadow: 0px 0px 26px 10px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 0px 0px 26px 10px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0px 0px 26px 10px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode header.scrolled nav .navbar-item,
+header.scrolled .navbar-item a {
+  color: #000;
+  transition: all ease-out 0.5s;
+}
+
+body.dark-mode nav.navbar {
+  position: absolute;
+  width: 100%;
+  background-color: transparent;
+  transition: all ease-out 0.5s;
+}
+
+body.dark-mode #splash-screen .button {
+  background-color: var(--color-palette-300);
+  color: var(--color-surface-100);
+}
+
 /*Dark mode des messages*/
 body.dark-mode article.box {
-  background-color: var(--color-surface-100);
+  background-color: var(--color-surface-400);
   color: var(--color-palette-200);
 }
 
+body.dark-mode article.box.animal-item {
+  background-color: var(--color-surface-100);
+}
+
 body.dark-mode div.chat-window.box {
-  background-color: var(--color-surface-700);
+  background-color: var(--color-surface-400);
+}
+
+body.dark-mode div.chat-window.box p {
+  color: var(--color-palette-200);
+}
+
+body.dark-mode div.chat-window.box p.box {
+  background-color: var(--color-surface-300);
+}
+
+body.dark-mode div.box {
+  background-color: var(--color-surface-400);
+}
+
+body.dark-mode #content.textarea {
+  background-color: var(--color-surface-600);
+}
+
+body.dark-mode div.is-vcentered.is-flex.is-align-items-center.is-justify-content-space-between {
+  background-color: var(--color-surface-400);
+}
+
+body.dark-mode div.column.is-one-third.messenger-item-list {
+  background-color: var(--color-surface-300);
 }
 
 /*Dark mode section carte et message*/
@@ -71,13 +125,6 @@ body.dark-mode section.yellow-line{
       rgba(255, 173, 96, 1) 100%);
   padding-bottom: 75px;
   padding-top: 75px;
-  /* background-color: var(--blue);
-  background: rgb(255, 238, 173);
-  background: linear-gradient(150deg,
-      rgb(59, 59, 59) 0%,
-      rgb(59, 59, 59) 100%);
-  padding-bottom: 75px;
-  padding-top: 75px; */
 } 
 
 /*Dark mode navbar*/
@@ -97,7 +144,7 @@ body.dark-mode button {
 
 
 body.dark-mode a.navbar-item {
-color : var(--color-palette-100);
+color : var(--color-surface-700);
 } 
 
 body.dark-mode #navbarMenu.navbar-menu {
@@ -105,8 +152,13 @@ body.dark-mode #navbarMenu.navbar-menu {
   background-color: transparent;
 }
 
-body.dark-mode react-toggle- {
-  background-color: var(--color-surface-500);
+body.dark-mode div.react-toggle-track {
+  background-color: var(--color-palette-500);
+}
+
+body.dark-mode div.react-toggle-track-check {
+  font-weight: bold;
+  color: var(--color-palette-300);
 }
 
 /*Dark mode des titres*/
@@ -116,10 +168,6 @@ body.dark-mode h3 {
 
 body.dark-mode h2 {
   color: var(--color-surface-100);
-}
-
-body.dark-mode p {
-  color : var()
 }
 
 body.dark-mode section.container.box{
@@ -136,6 +184,19 @@ body.dark-mode div.map-and-animals {
       rgba(255, 173, 96, 1) 100%);
 }
 
+/* body.dark-mode section {
+  background: linear-gradient(150deg,
+  rgba(255, 238, 173, 1) 0%,
+  rgba(255, 173, 96, 1) 100%);
+} */
+
+body.dark-mode div.container.columns.is-multiline {
+  background-color:var(--color-surface-500) 
+}
+
+body.dark-mode #user-type-info {
+  color: var(--color-palette-100);
+}
 
 /*Dark mode du footer*/
 body.dark-mode footer {
