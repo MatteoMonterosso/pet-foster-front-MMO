@@ -39,6 +39,8 @@ const speciesMap: { [key: number]: string } = {
 
 const TrouverAnimal: React.FC = () => {
   const divRef = React.useRef(null);
+  const [numChildren, setNumChildren] = useState<number>(0); 
+  
   const getNumberOfChildren = () => {
     if (divRef.current) {
       return divRef.current.children.length;
@@ -122,7 +124,11 @@ const TrouverAnimal: React.FC = () => {
       });
     }
   }, [formData, location]);
-
+  useEffect(() => {
+    if (divRef.current) {
+      setNumChildren(divRef.current.children.length);
+    }
+  }, [foundUsersAnimals, foundUsersFosterlingProfiles]);
   const [filterOpen, setFilterOpen] = useState<boolean>(false);
   const handleFilterOpen = () => {
     setFilterOpen(!filterOpen);
