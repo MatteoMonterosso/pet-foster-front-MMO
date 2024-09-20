@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import instanceAxios from '../../../axiosSetup/axiosSetup';
 import { useAuth } from '../../hooks/AuthContext';
 import { useToast } from '../../hooks/ToastContext';
 import { useModal } from '../../hooks/ModalContext';
@@ -18,8 +18,7 @@ interface FormData {
 
 const CreateAnimalProfileForm = () => {
   const { showSuccessToast, showErrorToast } = useToast();
-  const {closeModal} = useModal();
-
+  const { closeModal } = useModal();
 
   const { user: connectedUser } = useAuth(); // Récupère les infos du token JWT
 
@@ -31,7 +30,7 @@ const CreateAnimalProfileForm = () => {
   useEffect(() => {
     const fetchCsrfToken = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/csrf-token');
+        const response = await instanceAxios.get('/csrf-token');
         setCsrfToken(response.data);
       } catch (error) {
         console.error('Erreur lors de la récupération du token CSRF:', error);
@@ -54,7 +53,11 @@ const CreateAnimalProfileForm = () => {
   });
 
   // Gestion du changement dans les champs
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -63,7 +66,12 @@ const CreateAnimalProfileForm = () => {
 
   // Validation des champs obligatoires
   const validateForm = () => {
-    if (!formData.name || !formData.sexe || !formData.date_of_birth || formData.creator_id === null) {
+    if (
+      !formData.name ||
+      !formData.sexe ||
+      !formData.date_of_birth ||
+      formData.creator_id === null
+    ) {
       setErrorMessage('Tous les champs obligatoires doivent être remplis.');
       return false;
     }
@@ -77,23 +85,18 @@ const CreateAnimalProfileForm = () => {
     setSuccessMessage(null); // Réinitialise le message de succès
 
     if (!validateForm()) {
-      showErrorToast('Le formulaire n\'est pas validé');
+      showErrorToast("Le formulaire n'est pas validé");
       return; // Arrête si la validation échoue
-      
     }
 
     try {
-      await axios.post(
-        'http://localhost:3000/api/animals',
-        formData,
-        {
-          headers: {
-            'x-xsrf-token': csrfToken || '',
-          },
-        }
-      );
-      setSuccessMessage('Profil de l\'animal créé avec succès !');
-      showSuccessToast('Profil de l\'animal créé avec succès !');
+      await instanceAxios.post('/animals', formData, {
+        headers: {
+          'x-xsrf-token': csrfToken || '',
+        },
+      });
+      setSuccessMessage("Profil de l'animal créé avec succès !");
+      showSuccessToast("Profil de l'animal créé avec succès !");
       closeModal();
       // console.log('Réponse du serveur:', response.data);
     } catch (error: any) {
@@ -117,18 +120,16 @@ const CreateAnimalProfileForm = () => {
     <form className="columns is-multiline" onSubmit={handleSubmit}>
       {/* Affichage des messages de succès ou d'erreur */}
       {errorMessage && (
-        <div className="notification is-danger">
-          {errorMessage}
-        </div>
+        <div className="notification is-danger">{errorMessage}</div>
       )}
       {successMessage && (
-        <div className="notification is-success">
-          {successMessage}
-        </div>
+        <div className="notification is-success">{successMessage}</div>
       )}
 
       <div className="field column is-full">
-        <label className="label" htmlFor="name">Nom</label>
+        <label className="label" htmlFor="name">
+          Nom
+        </label>
         <div className="control">
           <input
             className="input"
@@ -144,11 +145,21 @@ const CreateAnimalProfileForm = () => {
       </div>
 
       <div className="field column is-half-desktop">
-        <label className="label" htmlFor="species_id">Espèce</label>
+        <label className="label" htmlFor="species_id">
+          Espèce
+        </label>
         <div className="control">
           <div className="select">
-            <select id="species_id" name="species_id" value={formData.species_id} onChange={handleChange} required>
-              <option value="" disabled>Sélectionnez une espèce</option>
+            <select
+              id="species_id"
+              name="species_id"
+              value={formData.species_id}
+              onChange={handleChange}
+              required
+            >
+              <option value="" disabled>
+                Sélectionnez une espèce
+              </option>
               <option value={1}>Chat</option>
               <option value={2}>Chien</option>
               <option value={3}>Cheval</option>
@@ -167,21 +178,39 @@ const CreateAnimalProfileForm = () => {
       </div>
 
       <div className="field column is-half-desktop">
-        <label className="label" htmlFor="sexe">Sexe</label>
+        <label className="label" htmlFor="sexe">
+          Sexe
+        </label>
         <div className="control columns">
           <label className="radio">
-            <input type="radio" id="male" name="sexe" value="M" required onChange={handleChange} />
+            <input
+              type="radio"
+              id="male"
+              name="sexe"
+              value="M"
+              required
+              onChange={handleChange}
+            />
             Mâle
           </label>
           <label className="radio">
-            <input type="radio" id="female" name="sexe" value="F" required onChange={handleChange} />
+            <input
+              type="radio"
+              id="female"
+              name="sexe"
+              value="F"
+              required
+              onChange={handleChange}
+            />
             Femelle
           </label>
         </div>
       </div>
 
       <div className="field column is-half-desktop">
-        <label className="label" htmlFor="date_of_birth">Date de naissance</label>
+        <label className="label" htmlFor="date_of_birth">
+          Date de naissance
+        </label>
         <div className="control">
           <input
             className="input"
@@ -199,7 +228,9 @@ const CreateAnimalProfileForm = () => {
       </div>
 
       <div className="field column is-half-desktop">
-        <label className="label" htmlFor="race">Race</label>
+        <label className="label" htmlFor="race">
+          Race
+        </label>
         <div className="control">
           <input
             className="input"
@@ -214,7 +245,9 @@ const CreateAnimalProfileForm = () => {
       </div>
 
       <div className="field column is-full">
-        <label className="label" htmlFor="short_story">Description courte</label>
+        <label className="label" htmlFor="short_story">
+          Description courte
+        </label>
         <div className="control">
           <textarea
             className="textarea"
@@ -228,7 +261,9 @@ const CreateAnimalProfileForm = () => {
       </div>
 
       <div className="field column is-full">
-        <label className="label" htmlFor="long_story">Description longue</label>
+        <label className="label" htmlFor="long_story">
+          Description longue
+        </label>
         <div className="control">
           <textarea
             className="textarea"
@@ -242,7 +277,9 @@ const CreateAnimalProfileForm = () => {
       </div>
 
       <div className="field column is-full">
-        <label className="label" htmlFor="health">Santé</label>
+        <label className="label" htmlFor="health">
+          Santé
+        </label>
         <div className="control">
           <textarea
             className="textarea"
@@ -255,7 +292,12 @@ const CreateAnimalProfileForm = () => {
         </div>
       </div>
 
-      <input type="hidden" id="creator_id" name="creator_id" value={formData.creator_id || ''} />
+      <input
+        type="hidden"
+        id="creator_id"
+        name="creator_id"
+        value={formData.creator_id || ''}
+      />
 
       <div className="field column is-full">
         <div className="control">

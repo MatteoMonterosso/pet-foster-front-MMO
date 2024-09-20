@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { Animal } from "src/@interfaces/animal";
-import axios from "axios";
+import { useState, useEffect } from 'react';
+import { Animal } from 'src/@interfaces/animal';
+import instanceAxios from '../../../axiosSetup/axiosSetup';
 
 interface IMiniatureAnimlProps {
   animal: Animal | null;
@@ -18,22 +18,22 @@ export default function MiniatureAnimal({ animal }: IMiniatureAnimlProps) {
   // Fetch animal pictures
   useEffect(() => {
     const fetchAnimalData = async () => {
-      if (!animal?.id) return; 
+      if (!animal?.id) return;
       try {
-        const animalResponse = await axios.get(
-          `http://localhost:3000/api/animals/${animal.id}`
-        );
+        const animalResponse = await instanceAxios.get(`/animals/${animal.id}`);
         setPictures(animalResponse.data.pictures);
       } catch (error: any) {
-        console.error('Erreur lors de la récupération des données de l\'animal:', error);
+        console.error(
+          "Erreur lors de la récupération des données de l'animal:",
+          error
+        );
       }
     };
 
-    fetchAnimalData(); 
-  }, [animal?.id]); 
+    fetchAnimalData();
+  }, [animal?.id]);
 
-
-  const placeholderImage = "/img/defaults/omnipet-the-mini-destructor.webp";
+  const placeholderImage = '/img/defaults/omnipet-the-mini-destructor.webp';
 
   return (
     <div className="animal-miniature has-text-centered">
@@ -50,7 +50,10 @@ export default function MiniatureAnimal({ animal }: IMiniatureAnimlProps) {
           }}
         />
       ) : (
-        <img src={placeholderImage} alt={`Image de ${animal?.name} manquante`} />
+        <img
+          src={placeholderImage}
+          alt={`Image de ${animal?.name} manquante`}
+        />
       )}
     </div>
   );

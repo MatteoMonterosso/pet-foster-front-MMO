@@ -3,7 +3,7 @@ import Message from '../partials/Message';
 import ContactUserMessagerieForm from '../formulaires/ContactUserMessagerieForm';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../hooks/AuthContext';
-import axios from 'axios';
+import instanceAxios from '../../../axiosSetup/axiosSetup';
 
 interface MessageType {
   id: number;
@@ -17,9 +17,12 @@ interface MessageType {
 
 function Messagerie() {
   const { user: connectedUser } = useAuth();
-  const [interlocutorsLastMessage, setInterlocutorsLastMessage] = useState<any>(null); // TODO Typage
+  const [interlocutorsLastMessage, setInterlocutorsLastMessage] =
+    useState<any>(null); // TODO Typage
 
-  const [currentInterlocutor, setCurrentInterlocutor] = useState<number | null>(null); // TODO Typage
+  const [currentInterlocutor, setCurrentInterlocutor] = useState<number | null>(
+    null
+  ); // TODO Typage
 
   const [currentChat, setCurrentChat] = useState<MessageType[] | null>(null); // TODO Typage
 
@@ -28,8 +31,8 @@ function Messagerie() {
     if (connectedUser) {
       async function fetchInterlocutors() {
         try {
-          const response = await axios.get(
-            `http://localhost:3000/api/connectedUser/${connectedUser?.userId}/messages`
+          const response = await instanceAxios.get(
+            `/connectedUser/${connectedUser?.userId}/messages`
           );
 
           if (response.status === 200) {
@@ -45,10 +48,13 @@ function Messagerie() {
   }, [connectedUser]);
 
   // Récupération des discussions avec un interlocuteur spécifique
-  async function fetchDisscussion(connectedUserId: number, interlocutorId: number) {
+  async function fetchDisscussion(
+    connectedUserId: number,
+    interlocutorId: number
+  ) {
     try {
-      const response = await axios.get(
-        `http://localhost:3000/api/connectedUser/${connectedUserId}/messages/interlocutor/${interlocutorId}`
+      const response = await instanceAxios.get(
+        `/connectedUser/${connectedUserId}/messages/interlocutor/${interlocutorId}`
       );
 
       if (response.status === 200) {
@@ -85,19 +91,20 @@ function Messagerie() {
               />
             ))
           ) : (
-            <div>
-              
-            </div>
+            <div></div>
           )}
         </div>
 
         {/* Fenêtre de discussion */}
         <div className="column">
           <div className="chat-window box is-flex is-flex-direction-column-reverse">
-            {interlocutorsLastMessage && interlocutorsLastMessage.length === 0 ? (
+            {interlocutorsLastMessage &&
+            interlocutorsLastMessage.length === 0 ? (
               <p>Vous n'avez pas de message</p>
             ) : currentChat ? (
-              currentChat.map((item) => <Message message={item} key={item.id} />)
+              currentChat.map((item) => (
+                <Message message={item} key={item.id} />
+              ))
             ) : (
               <p>Sélectionnez une discussion</p>
             )}

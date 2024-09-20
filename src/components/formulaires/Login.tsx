@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import instanceAxios from '../../../axiosSetup/axiosSetup';
 import { useAuth } from '../../hooks/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../../hooks/ToastContext';
@@ -21,9 +22,7 @@ function LoginForm() {
   useEffect(() => {
     const fetchCsrfToken = async () => {
       try {
-        const response = await axios.get(
-          'http://localhost:3000/api/csrf-token'
-        );
+        const response = await instanceAxios.get('/csrf-token');
         setCsrfToken(response.data);
       } catch (error) {
         console.error('Erreur lors de la récupération du token CSRF:', error);
@@ -63,8 +62,8 @@ function LoginForm() {
     if (valid) {
       setIsSubmitting(true); // Activer le mode soumission pour désactiver le bouton
       try {
-        const response = await axios.post(
-          'http://localhost:3000/api/loginh',
+        const response = await instanceAxios.post(
+          '/loginh',
           {
             email: emailLogin.trim(),
             password: passwordLogin.trim(),

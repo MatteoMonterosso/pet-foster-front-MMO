@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import instanceAxios from '../../../axiosSetup/axiosSetup';
 import { useToast } from '../../hooks/ToastContext';
 import { useModal } from '../../hooks/ModalContext';
 
@@ -30,7 +30,7 @@ const EditAnimalProfileForm = ({ animalId }: { animalId: number | null }) => {
   useEffect(() => {
     const fetchCsrfToken = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/csrf-token');
+        const response = await instanceAxios.get('/csrf-token');
         setCsrfToken(response.data);
       } catch (error) {
         console.error('Erreur lors de la récupération du token CSRF:', error);
@@ -43,7 +43,7 @@ const EditAnimalProfileForm = ({ animalId }: { animalId: number | null }) => {
   useEffect(() => {
     const fetchAnimalData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/animals/${id}`);
+        const response = await instanceAxios.get(`/animals/${id}`);
         const animalData = response.data;
         setFormData({
           name: animalData.name,
@@ -57,7 +57,10 @@ const EditAnimalProfileForm = ({ animalId }: { animalId: number | null }) => {
         });
         setLoading(false);
       } catch (error) {
-        console.error('Erreur lors du chargement des données de l\'animal:', error);
+        console.error(
+          "Erreur lors du chargement des données de l'animal:",
+          error
+        );
         setLoading(false);
       }
     };
@@ -68,7 +71,11 @@ const EditAnimalProfileForm = ({ animalId }: { animalId: number | null }) => {
   }, [id]);
 
   // Gère les changements de formulaire
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     if (formData) {
       setFormData({
         ...formData,
@@ -91,21 +98,17 @@ const EditAnimalProfileForm = ({ animalId }: { animalId: number | null }) => {
     e.preventDefault();
 
     if (!validateForm()) {
-      showErrorToast('Le formulaire n\'est pas valide.');
+      showErrorToast("Le formulaire n'est pas valide.");
       return;
     }
 
     try {
-      await axios.put(
-        `http://localhost:3000/api/animals/${id}`,
-        formData,
-        {
-          headers: {
-            'x-xsrf-token': csrfToken || '',
-          },
-        }
-      );
-      showSuccessToast('Profil de l\'animal mis à jour avec succès !');
+      await instanceAxios.put(`/animals/${id}`, formData, {
+        headers: {
+          'x-xsrf-token': csrfToken || '',
+        },
+      });
+      showSuccessToast("Profil de l'animal mis à jour avec succès !");
       closeModal();
     } catch (error: any) {
       if (error.response) {
@@ -118,7 +121,7 @@ const EditAnimalProfileForm = ({ animalId }: { animalId: number | null }) => {
   };
 
   if (loading) {
-    return <div className='loaderanim'></div>;
+    return <div className="loaderanim"></div>;
   }
 
   return (
@@ -130,7 +133,9 @@ const EditAnimalProfileForm = ({ animalId }: { animalId: number | null }) => {
       )}
 
       <div className="field column is-full">
-        <label className="label" htmlFor="name">Nom</label>
+        <label className="label" htmlFor="name">
+          Nom
+        </label>
         <div className="control">
           <input
             className="input"
@@ -145,11 +150,21 @@ const EditAnimalProfileForm = ({ animalId }: { animalId: number | null }) => {
       </div>
 
       <div className="field column is-half-desktop">
-        <label className="label" htmlFor="species_id">Espèce</label>
+        <label className="label" htmlFor="species_id">
+          Espèce
+        </label>
         <div className="control">
           <div className="select">
-            <select id="species_id" name="species_id" value={formData?.species_id || 1} onChange={handleChange} required>
-              <option value="" disabled>Sélectionnez une espèce</option>
+            <select
+              id="species_id"
+              name="species_id"
+              value={formData?.species_id || 1}
+              onChange={handleChange}
+              required
+            >
+              <option value="" disabled>
+                Sélectionnez une espèce
+              </option>
               <option value={1}>Chat</option>
               <option value={2}>Chien</option>
               <option value={3}>Cheval</option>
@@ -160,7 +175,9 @@ const EditAnimalProfileForm = ({ animalId }: { animalId: number | null }) => {
       </div>
 
       <div className="field column is-half-desktop">
-        <label className="label" htmlFor="sexe">Sexe</label>
+        <label className="label" htmlFor="sexe">
+          Sexe
+        </label>
         <div className="control columns">
           <label className="radio">
             <input
@@ -187,7 +204,9 @@ const EditAnimalProfileForm = ({ animalId }: { animalId: number | null }) => {
 
       {/* Date de naissance */}
       <div className="field column is-half-desktop">
-        <label className="label" htmlFor="date_of_birth">Date de naissance</label>
+        <label className="label" htmlFor="date_of_birth">
+          Date de naissance
+        </label>
         <div className="control">
           <input
             className="input"
@@ -203,7 +222,9 @@ const EditAnimalProfileForm = ({ animalId }: { animalId: number | null }) => {
 
       {/* Short Story */}
       <div className="field column is-full">
-        <label className="label" htmlFor="short_story">Histoire courte</label>
+        <label className="label" htmlFor="short_story">
+          Histoire courte
+        </label>
         <div className="control">
           <textarea
             className="textarea"
@@ -218,7 +239,9 @@ const EditAnimalProfileForm = ({ animalId }: { animalId: number | null }) => {
 
       {/* Long Story */}
       <div className="field column is-full">
-        <label className="label" htmlFor="long_story">Histoire longue</label>
+        <label className="label" htmlFor="long_story">
+          Histoire longue
+        </label>
         <div className="control">
           <textarea
             className="textarea"
@@ -233,7 +256,9 @@ const EditAnimalProfileForm = ({ animalId }: { animalId: number | null }) => {
 
       {/* Health */}
       <div className="field column is-full">
-        <label className="label" htmlFor="health">Santé</label>
+        <label className="label" htmlFor="health">
+          Santé
+        </label>
         <div className="control">
           <textarea
             className="textarea"

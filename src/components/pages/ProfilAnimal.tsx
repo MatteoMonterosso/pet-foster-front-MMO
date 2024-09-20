@@ -1,7 +1,7 @@
 import { useModal } from '../../hooks/ModalContext';
 import { useState, useEffect, useRef } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import axios from 'axios';
+import instanceAxios from '../../../axiosSetup/axiosSetup';
 import MapComponent from '../partials/MapComponent';
 import GalleryComponent from '../partials/GalleryComponent';
 import computeAge from '../../utils/computeAge';
@@ -13,7 +13,6 @@ import UploadImageForm from '../formulaires/UploadImageForm';
 import { MapMarker } from 'react-flaticons';
 import dayjs from 'dayjs';
 import { Helmet } from 'react-helmet';
-
 
 const AnimalProfile = () => {
   const sectionRef = useRef(null);
@@ -36,14 +35,12 @@ const AnimalProfile = () => {
   const fetchAnimalData = async () => {
     try {
       // Récupérer les informations de l'animal
-      const animalResponse = await axios.get(
-        `http://localhost:3000/api/animals/${id}`
-      );
+      const animalResponse = await instanceAxios.get(`/animals/${id}`);
       setAnimal(animalResponse.data);
 
       if (connectedUser) {
-        const userResponse = await axios.get(
-          `http://localhost:3000/api/users/${connectedUser.userId}`
+        const userResponse = await instanceAxios.get(
+          `/users/${connectedUser.userId}`
         );
         setUserData(userResponse.data);
       }
@@ -70,9 +67,14 @@ const AnimalProfile = () => {
 
   return (
     <>
-    <Helmet>
-        <title>Adoptez {animal?.name} ({animal?.species.name})</title>
-        <meta name="description" content={`Adoptez ${animal?.name} (${animal?.species.name}) sur Pet Foster. ${animal?.species.name}, ${animal?.short_story}`} />
+      <Helmet>
+        <title>
+          Adoptez {animal?.name} ({animal?.species.name})
+        </title>
+        <meta
+          name="description"
+          content={`Adoptez ${animal?.name} (${animal?.species.name}) sur Pet Foster. ${animal?.species.name}, ${animal?.short_story}`}
+        />
       </Helmet>
       <div>
         <h1 className="title">{animal?.name}</h1>
@@ -85,7 +87,11 @@ const AnimalProfile = () => {
           {animal?.pictures && animal.pictures.length > 0 ? (
             <GalleryComponent pictures={animal.pictures} />
           ) : (
-            <img src="https://placehold.co/600x400?text=Pas+d'images+pour+le+moment" alt="aucune image" width="100%"/>
+            <img
+              src="https://placehold.co/600x400?text=Pas+d'images+pour+le+moment"
+              alt="aucune image"
+              width="100%"
+            />
           )}
 
           {/* Formulaire d'upload */}
@@ -285,7 +291,10 @@ const AnimalProfile = () => {
                         )
                       }
                     >
-                      Faire une demande {connectedUser?.userType === "adoptant" ? "d'adoption" : "d'accueil"}
+                      Faire une demande{' '}
+                      {connectedUser?.userType === 'adoptant'
+                        ? "d'adoption"
+                        : "d'accueil"}
                     </button>
                   )}
                 {!connectedUser && (

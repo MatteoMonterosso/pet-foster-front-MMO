@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useToast } from '../../hooks/ToastContext';
 import { useModal } from '../../hooks/ModalContext';
-import axios from 'axios';
+import instanceAxios from '../../../axiosSetup/axiosSetup';
 
 interface ContactUserFormProps {
   senderId: number | null; // ID de l'expéditeur
@@ -15,9 +15,7 @@ function ContactUserForm({ senderId, receiverId }: ContactUserFormProps) {
   useEffect(() => {
     const fetchCsrfToken = async () => {
       try {
-        const response = await axios.get(
-          'http://localhost:3000/api/csrf-token'
-        );
+        const response = await instanceAxios.get('/csrf-token');
         setCsrfToken(response.data);
       } catch (error) {
         console.error('Erreur lors de la récupération du token CSRF:', error);
@@ -46,7 +44,7 @@ function ContactUserForm({ senderId, receiverId }: ContactUserFormProps) {
     e.preventDefault();
 
     try {
-      await axios.post('http://localhost:3000/api/messages', formData, {
+      await instanceAxios.post('/messages', formData, {
         headers: {
           'x-xsrf-token': csrfToken || '', // Inclure le token CSRF dans les headers
         },

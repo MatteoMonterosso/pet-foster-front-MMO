@@ -1,7 +1,13 @@
-import React, { useState, useEffect, ChangeEvent, FormEvent, useRef } from 'react';
+import React, {
+  useState,
+  useEffect,
+  ChangeEvent,
+  FormEvent,
+  useRef,
+} from 'react';
 import { Link } from 'react-router-dom';
 import computeAge from '../../utils/computeAgeTrouverAnimal';
-import axios from 'axios';
+import instanceAxios from '../../../axiosSetup/axiosSetup';
 import AnimalItemList from '../partials/AnimalItemList';
 import MapComponent from '../partials/MapComponent';
 import { useGeolocation } from '../../hooks/GeolocationContext';
@@ -39,8 +45,8 @@ const speciesMap: { [key: number]: string } = {
 
 const TrouverAnimal: React.FC = () => {
   const divRef = React.useRef(null);
-  const [numChildren, setNumChildren] = useState<number>(0); 
-  
+  const [numChildren, setNumChildren] = useState<number>(0);
+
   const getNumberOfChildren = () => {
     if (divRef.current) {
       return divRef.current.children.length;
@@ -102,26 +108,24 @@ const TrouverAnimal: React.FC = () => {
     }
   }, [allUsers]);
 
-
-
   // Fetch users data based on filters
   useEffect(() => {
     if (formData.search_area && location?.lat && location?.lng) {
-    const speciesFilter = formData.species
-      ? `&species=${formData.species}`
-      : '';
-    const apiUrl = `http://localhost:3000/api/users?perimeter=${formData.search_area}000&latitude=${location?.lat}&longitude=${location?.lng}${speciesFilter}`;
+      const speciesFilter = formData.species
+        ? `&species=${formData.species}`
+        : '';
+      const apiUrl = `/users?perimeter=${formData.search_area}000&latitude=${location?.lat}&longitude=${location?.lng}${speciesFilter}`;
 
-    axios
-      .get(apiUrl)
-      .then((response) => {
-        setAllUsers(response.data);
-        setLoadingUsers(false);
-      })
-      .catch(() => {
-        setFetchUsersError('Error fetching data');
-        setLoadingUsers(false);
-      });
+      instanceAxios
+        .get(apiUrl)
+        .then((response) => {
+          setAllUsers(response.data);
+          setLoadingUsers(false);
+        })
+        .catch(() => {
+          setFetchUsersError('Error fetching data');
+          setLoadingUsers(false);
+        });
     }
   }, [formData, location]);
   useEffect(() => {
@@ -143,11 +147,15 @@ const TrouverAnimal: React.FC = () => {
           <h1 className="title">Trouver un animal</h1>
         )}
       </div>
-      
+
       {/* {JSON.stringify(filteredAnimals?.length || '0')} */}
       <div id="animal-filter" className={filterOpen ? 'open' : ''}>
-        <button onClick={handleFilterOpen} className="button is-success" title="Filtrer">        
-            {filterOpen ? <FilterSlash /> : <Filter />}
+        <button
+          onClick={handleFilterOpen}
+          className="button is-success"
+          title="Filtrer"
+        >
+          {filterOpen ? <FilterSlash /> : <Filter />}
         </button>
 
         <form onSubmit={handleAnimalFilterSubmit}>
@@ -241,7 +249,6 @@ const TrouverAnimal: React.FC = () => {
                   Essayez d'agrandir le périmètre de recherche.
                 </p>
               ))}
-              
 
           {!connectedUser || connectedUser.userType !== 'association' ? (
             <div ref={divRef} className="animal-list">
@@ -294,24 +301,28 @@ const TrouverAnimal: React.FC = () => {
                   })
                   .map((profile, index) => (
                     <Link to={`/profil/${profile.users_id}`} key={index}>
-                    <div className="yellow-card columns card is-vcentered m-4 is-mobile">
-                      <div className="column has-text-centered">
-                        <strong className="is-size-7">
-                          {profile.userName}
-                        </strong>
-                        <br />
-                        <span className="is-size-7">{profile.userType}</span>
+                      <div className="yellow-card columns card is-vcentered m-4 is-mobile">
+                        <div className="column has-text-centered">
+                          <strong className="is-size-7">
+                            {profile.userName}
+                          </strong>
+                          <br />
+                          <span className="is-size-7">{profile.userType}</span>
+                        </div>
+                        <div className="column is-narrow">
+                          {profile.quantity}
+                        </div>
+                        <div className="column">
+                          <IdToSPecies speciesId={profile.species_id} />
+                        </div>
+                        <div className="column is-narrow">
+                          <GenderIcon gender={profile.sexe} size={15} />
+                        </div>
+                        <div className="column">
+                          {profile.age} an{profile.age === '-1' ? '' : 's'}
+                        </div>
                       </div>
-                      <div className="column is-narrow">{profile.quantity}</div>
-                      <div className="column">
-                        <IdToSPecies speciesId={profile.species_id} />
-                      </div>
-                      <div className="column is-narrow">
-                        <GenderIcon gender={profile.sexe} size={15} />
-                      </div>
-                      <div className="column">{profile.age} an{profile.age === "-1" ? "" : 's'}</div>
-                    </div>
-                  </Link>
+                    </Link>
                   ))}
             </div>
           )}

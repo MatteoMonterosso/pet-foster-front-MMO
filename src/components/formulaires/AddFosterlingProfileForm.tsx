@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useToast } from '../../hooks/ToastContext';
 import { useModal } from '../../hooks/ModalContext';
+import instanceAxios from '../../../axiosSetup/axiosSetup';
 
 interface IAddFosterlingProfileFormProps {
   userId: number;
@@ -26,9 +26,7 @@ const AddFosterlingProfileForm = ({
   useEffect(() => {
     const fetchCsrfToken = async () => {
       try {
-        const response = await axios.get(
-          'http://localhost:3000/api/csrf-token'
-        );
+        const response = await instanceAxios.get('/csrf-token');
         setCsrfToken(response.data);
       } catch (error) {
         console.error('Erreur lors de la récupération du token CSRF:', error);
@@ -76,7 +74,7 @@ const AddFosterlingProfileForm = ({
 
     setIsSubmitting(true);
     try {
-      await axios.post('http://localhost:3000/api/profiles', formData, {
+      await instanceAxios.post('/profiles', formData, {
         headers: {
           'Content-Type': 'application/json',
           'x-xsrf-token': csrfToken || '',

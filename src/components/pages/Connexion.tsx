@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import instanceAxios from '../../../axiosSetup/axiosSetup';
 import LoginForm from '../formulaires/Login';
 import { useToast } from '../../hooks/ToastContext';
+import axios from 'axios';
 
 const RegistrationPage = () => {
   const { showSuccessToast, showErrorToast } = useToast();
@@ -27,9 +28,7 @@ const RegistrationPage = () => {
   useEffect(() => {
     const fetchCsrfToken = async () => {
       try {
-        const response = await axios.get(
-          'http://localhost:3000/api/csrf-token'
-        );
+        const response = await instanceAxios.get('/csrf-token');
         setCsrfToken(response.data);
       } catch (error) {
         console.error('Erreur lors de la récupération du token CSRF:', error);
@@ -67,16 +66,12 @@ const RegistrationPage = () => {
     console.log(JSON.stringify(formData));
 
     try {
-      const response = await axios.post(
-        'http://localhost:3000/api/users',
-        formData,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'x-xsrf-token': csrfToken || '',
-          },
-        }
-      );
+      const response = await instanceAxios.post('/users', formData, {
+        headers: {
+          'Content-Type': 'application/json',
+          'x-xsrf-token': csrfToken || '',
+        },
+      });
 
       console.log('Utilisateur créé avec succès :', response);
       showSuccessToast(
@@ -201,7 +196,7 @@ const RegistrationPage = () => {
                       checked={type_user === 'famille'}
                       onChange={(e) => settype_user(e.target.value)}
                     />
-                    Famille
+                    Famille d'accueil
                   </label>
                   <label className="radio column is-one-third-desktop">
                     <input

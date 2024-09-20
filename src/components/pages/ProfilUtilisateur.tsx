@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import axios from 'axios';
+import instanceAxios from '../../../axiosSetup/axiosSetup';
 import { Pencil, PlusSmall } from 'react-flaticons';
 import { useModal } from '../../hooks/ModalContext';
 import FosterlingProfile from '../partials/FosterlingProfile';
@@ -9,7 +9,7 @@ import { useToast } from '../../hooks/ToastContext';
 import GalleryComponent from '../partials/GalleryComponent';
 import { User } from 'src/@interfaces/user';
 import UploadImageForm from '../formulaires/UploadImageForm';
-import UserImages from '../partials/UserImages'
+import UserImages from '../partials/UserImages';
 
 function ProfilUtilisateur() {
   const { showSuccessToast, showErrorToast } = useToast();
@@ -25,7 +25,7 @@ function ProfilUtilisateur() {
   useEffect(() => {
     const fetchCsrfToken = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/csrf-token', {});
+        const response = await instanceAxios.get('/csrf-token', {});
         setCsrfToken(response.data);
       } catch (error) {
         console.error('Erreur lors de la récupération du token CSRF:', error);
@@ -37,10 +37,10 @@ function ProfilUtilisateur() {
   // Récupération des données de l'utilisateur
   const fetchUserData = useCallback(async () => {
     try {
-      const userResponse = await axios.get(`http://localhost:3000/api/users/${id}`);
+      const userResponse = await instanceAxios.get(`/users/${id}`);
       setUser(userResponse.data);
     } catch (error) {
-      showErrorToast("Erreur réseau");
+      showErrorToast('Erreur réseau');
     } finally {
       setLoading(false);
     }
@@ -53,15 +53,15 @@ function ProfilUtilisateur() {
   // Suppression d'un profil d'accueil
   const deleteProfile = async (profileId: number) => {
     try {
-      await axios.delete(`http://localhost:3000/api/profiles/${profileId}`, {
+      await instanceAxios.delete(`/profiles/${profileId}`, {
         headers: {
           'x-xsrf-token': csrfToken || '',
         },
       });
-      showSuccessToast("Profil supprimé avec succès");
+      showSuccessToast('Profil supprimé avec succès');
       await fetchUserData();
     } catch (error) {
-      showErrorToast("Erreur lors de la suppression du profil");
+      showErrorToast('Erreur lors de la suppression du profil');
     }
   };
 
@@ -82,24 +82,28 @@ function ProfilUtilisateur() {
 
       <section className="section">
         <div className="container">
-          {connectedUser && user && id && connectedUser.userId === parseInt(id) && (
-            <p className="notification is-primary has-text-centered">
-              Ceci est votre profil, vous pouvez l'éditer grâce au bouton présent plus bas.
-            </p>
-          )}
+          {connectedUser &&
+            user &&
+            id &&
+            connectedUser.userId === parseInt(id) && (
+              <p className="notification is-primary has-text-centered">
+                Ceci est votre profil, vous pouvez l'éditer grâce au bouton
+                présent plus bas.
+              </p>
+            )}
           <div className="columns is-multiline">
             <div className="column is-half">
-              <GalleryComponent 
-                pictures={user?.pictures ?? []} 
-                userPictures={user?.pictures ?? []} 
+              <GalleryComponent
+                pictures={user?.pictures ?? []}
+                userPictures={user?.pictures ?? []}
               />
               {/* Ajout du formulaire d'upload */}
-              {connectedUser && connectedUser.userId === user?.id &&
-                <UploadImageForm 
-                  userId={connectedUser.userId} 
-                  fetchUserImages={fetchUserData} 
+              {connectedUser && connectedUser.userId === user?.id && (
+                <UploadImageForm
+                  userId={connectedUser.userId}
+                  fetchUserImages={fetchUserData}
                 />
-              }
+              )}
             </div>
 
             <div className="column is-half">
@@ -107,13 +111,27 @@ function ProfilUtilisateur() {
                 <>
                   <h2 className="title">{user.type_user}</h2>
                   <ul className="list is-hoverable">
-                    <li><strong>Nom:</strong> {user.name}</li>
-                    <li><strong>Email:</strong> {user.email}</li>
-                    <li><strong>Tél:</strong> {user.phone}</li>
-                    <li><strong>Pays:</strong> {user.country}</li>
-                    <li><strong>Code postal:</strong> {user.zip}</li>
-                    <li><strong>Ville:</strong> {user.city}</li>
-                    <li><strong>Adresse:</strong> {user.address}</li>
+                    <li>
+                      <strong>Nom:</strong> {user.name}
+                    </li>
+                    <li>
+                      <strong>Email:</strong> {user.email}
+                    </li>
+                    <li>
+                      <strong>Tél:</strong> {user.phone}
+                    </li>
+                    <li>
+                      <strong>Pays:</strong> {user.country}
+                    </li>
+                    <li>
+                      <strong>Code postal:</strong> {user.zip}
+                    </li>
+                    <li>
+                      <strong>Ville:</strong> {user.city}
+                    </li>
+                    <li>
+                      <strong>Adresse:</strong> {user.address}
+                    </li>
                   </ul>
                 </>
               )}
@@ -131,48 +149,78 @@ function ProfilUtilisateur() {
           {!connectedUser && (
             <div className="notification is-info is-light mt-4">
               <p className="has-text-centered">
-                Connectez-vous à votre compte pour pouvoir contacter {user?.name}
+                Connectez-vous à votre compte pour pouvoir contacter{' '}
+                {user?.name}
               </p>
               <div className="has-text-centered">
-                <Link to="/connexion" className="button is-primary">Se connecter</Link>
+                <Link to="/connexion" className="button is-primary">
+                  Se connecter
+                </Link>
               </div>
             </div>
           )}
 
           {user && connectedUser && connectedUser.userId !== user.id && (
             <div className="has-text-right mt-4">
-              <button className="button is-primary" onClick={() => openModal('contactUser', connectedUser.userId, user.id)}>
+              <button
+                className="button is-primary"
+                onClick={() =>
+                  openModal('contactUser', connectedUser.userId, user.id)
+                }
+              >
                 Contacter
               </button>
             </div>
           )}
 
-          {connectedUser && user && id !== undefined && connectedUser.userId === parseInt(id) && (
-            <div className="has-text-right mt-4">
-              <button 
-                className="button is-primary" 
-                onClick={() => openModal('editUserProfile', undefined, undefined, undefined, user)} 
-              >
-                <Pencil /> Éditer
-              </button>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {user?.type_user !== "association" && (
-        <section className="section">
-          <div className="container">
-            <h2 className="title">Profils d'accueil</h2>
-            {connectedUser && user && id !== undefined && connectedUser.userId === parseInt(id) && (
-              <div className="has-text-right mb-4">
-                <button className="button is-primary" onClick={() => openModal('addFosterlingProfile', connectedUser.userId)}>
-                  <PlusSmall /> Ajouter
+          {connectedUser &&
+            user &&
+            id !== undefined &&
+            connectedUser.userId === parseInt(id) && (
+              <div className="has-text-right mt-4">
+                <button
+                  className="button is-primary"
+                  onClick={() =>
+                    openModal(
+                      'editUserProfile',
+                      undefined,
+                      undefined,
+                      undefined,
+                      user
+                    )
+                  }
+                >
+                  <Pencil /> Éditer
                 </button>
               </div>
             )}
+        </div>
+      </section>
+
+      {user?.type_user !== 'association' && (
+        <section className="section">
+          <div className="container">
+            <h2 className="title">Profils d'accueil</h2>
+            {connectedUser &&
+              user &&
+              id !== undefined &&
+              connectedUser.userId === parseInt(id) && (
+                <div className="has-text-right mb-4">
+                  <button
+                    className="button is-primary"
+                    onClick={() =>
+                      openModal('addFosterlingProfile', connectedUser.userId)
+                    }
+                  >
+                    <PlusSmall /> Ajouter
+                  </button>
+                </div>
+              )}
             {user?.fosterlingProfiles && user.fosterlingProfiles.length > 0 ? (
-              <table id="fosterling-profiles-table" className="table is-fullwidth has-text-centered card">
+              <table
+                id="fosterling-profiles-table"
+                className="table is-fullwidth has-text-centered card"
+              >
                 <thead>
                   <tr>
                     <th className="has-text-centered">Espèce</th>
@@ -185,7 +233,11 @@ function ProfilUtilisateur() {
                 </thead>
                 <tbody>
                   {user?.fosterlingProfiles?.map((profile) => (
-                    <FosterlingProfile key={profile.id} profile={profile} deleteFunction={deleteProfile} />
+                    <FosterlingProfile
+                      key={profile.id}
+                      profile={profile}
+                      deleteFunction={deleteProfile}
+                    />
                   ))}
                 </tbody>
               </table>

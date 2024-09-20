@@ -1,12 +1,17 @@
 import { createContext, useContext, useState, ReactNode } from 'react';
 import { User } from 'src/@interfaces/user';
 
-
 interface ModalContextType {
   modalContent: string | null;
   setModalContent: (content: string | null) => void;
   isActive: boolean;
-  openModal: (content: string, senderId?: number, receiverId?: number, id?: number, fullUser?: User | null) => void;
+  openModal: (
+    content: string,
+    senderId?: number | null,
+    receiverId?: number | null,
+    id?: number | null,
+    fullUser?: User | null
+  ) => void;
   closeModal: () => void;
   senderId: number | null;
   receiverId: number | null;
@@ -26,19 +31,25 @@ export function ModalProvider({ children }: ModalProviderProps) {
   const [senderId, setSenderId] = useState<number | null>(null);
   const [receiverId, setReceiverId] = useState<number | null>(null);
   const [animalId, setAnimalId] = useState<number | null>(null);
-  const [fullUser, setFullUser] = useState<User | null>(null); 
+  const [fullUser, setFullUser] = useState<User | null>(null);
 
-  const openModal = (content: string, senderId?: number, receiverId?: number, id?: number, fullUser?: User | null) => {
+  const openModal = (
+    content: string,
+    senderId?: number | null,
+    receiverId?: number | null,
+    id?: number | null,
+    fullUser?: User | null
+  ) => {
     setModalContent(content);
-    
+
     setSenderId(senderId !== undefined ? senderId : null);
-    
+
     setReceiverId(receiverId !== undefined ? receiverId : null);
-    
+
     setAnimalId(id !== undefined ? id : null);
-    
+
     setFullUser(fullUser !== undefined ? fullUser : null);
-    
+
     setIsActive(true);
   };
 
@@ -52,7 +63,19 @@ export function ModalProvider({ children }: ModalProviderProps) {
   };
 
   return (
-    <ModalContext.Provider value={{ isActive, openModal, closeModal, modalContent, setModalContent, senderId, receiverId, animalId, fullUser }}>
+    <ModalContext.Provider
+      value={{
+        isActive,
+        openModal,
+        closeModal,
+        modalContent,
+        setModalContent,
+        senderId,
+        receiverId,
+        animalId,
+        fullUser,
+      }}
+    >
       {children}
     </ModalContext.Provider>
   );

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import instanceAxios from '../../../axiosSetup/axiosSetup';
 import { useAuth } from '../../hooks/AuthContext';
 import { User } from '../../@interfaces/user';
 import { Animal } from '../../@interfaces/animal';
@@ -52,8 +52,8 @@ const FilterPage = () => {
   // Récupérer les données de l'utilisateur connecté
   useEffect(() => {
     if (connectedUser) {
-      axios
-        .get(`http://localhost:3000/api/users/${connectedUser.userId}`)
+      instanceAxios
+        .get(`/users/${connectedUser.userId}`)
         .then((response) => {
           const userData = response.data;
           setMyUser(userData);
@@ -64,12 +64,10 @@ const FilterPage = () => {
 
             // Récupérer les détails des utilisateurs et des animaux
             const userDetailsPromises = userRequests.map((request: any) =>
-              axios.get(`http://localhost:3000/api/users/${request.users_id}`)
+              instanceAxios.get(`/users/${request.users_id}`)
             );
             const animalDetailsPromises = userRequests.map((request: any) =>
-              axios.get(
-                `http://localhost:3000/api/animals/${request.animals_id}`
-              )
+              instanceAxios.get(`/animals/${request.animals_id}`)
             );
 
             const userDetailsResponses = await Promise.all(userDetailsPromises);
@@ -114,7 +112,7 @@ const FilterPage = () => {
   useEffect(() => {
     async function getAllRequests() {
       try {
-        const response = await axios.get('http://localhost:3000/api/requests');
+        const response = await instanceAxios.get('/requests');
         setAllFosterlingRequests(sortRequests(response.data));
       } catch (e) {
         console.error(e);
@@ -122,9 +120,7 @@ const FilterPage = () => {
     }
     const fetchCsrfToken = async () => {
       try {
-        const response = await axios.get(
-          'http://localhost:3000/api/csrf-token'
-        );
+        const response = await instanceAxios.get('/csrf-token');
         setCsrfToken(response.data);
       } catch (error) {
         console.error('Erreur lors de la récupération du token CSRF:', error);
@@ -144,8 +140,8 @@ const FilterPage = () => {
       )
     ) {
       try {
-        await axios.patch(
-          `http://localhost:3000/api/requests/${requestId}`,
+        await instanceAxios.patch(
+          `/requests/${requestId}`,
           { request_status: status },
           {
             headers: {
@@ -154,9 +150,7 @@ const FilterPage = () => {
           }
         );
 
-        const response = await axios.get(
-          `http://localhost:3000/api/requests/${requestId}`
-        );
+        const response = await instanceAxios.get(`/requests/${requestId}`);
 
         const requestData = response.data;
 
@@ -252,7 +246,7 @@ const FilterPage = () => {
                           </a>
                         </td>
                         <td>{request.content_request}</td>
-                        <td className='request-status'>
+                        <td className="request-status">
                           {request.request_status.toLowerCase() ===
                             'pending' && (
                             <span className="tag is-warning">En attente</span>
@@ -266,8 +260,9 @@ const FilterPage = () => {
                             <span className="tag is-success">Validée</span>
                           )}
                         </td>
-                        <td className='validator'>
-                          {request.request_status.toLowerCase() === 'pending'  && (
+                        <td className="validator">
+                          {request.request_status.toLowerCase() ===
+                            'pending' && (
                             <>
                               <button
                                 className="button is-small is-success"
